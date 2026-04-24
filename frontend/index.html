@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retail Researcher — Autonomous AI Agent</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ── Ambient background ───────────────────────────────────────────── -->
+<div class="bg-grid"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+
+<!-- ── Header ───────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">RetailResearcher</span>
+      <span class="logo-badge">AI</span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn active" data-view="research">Research</button>
+      <button class="nav-btn" data-view="history">History</button>
+    </nav>
+    <div class="header-status">
+      <span class="status-dot" id="statusDot"></span>
+      <span class="status-text" id="statusText">Connecting...</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── Main ─────────────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- ── Research View ──────────────────────────────────────────────── -->
+  <section class="view" id="view-research">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-label">MULTI-AGENT SYSTEM</div>
+      <h1 class="hero-title">Autonomous Retail<br /><em>Intelligence</em></h1>
+      <p class="hero-sub">
+        4 AI agents working in parallel — real-time search, RAG memory,<br />
+        structured analysis, and actionable insights.
+      </p>
+    </div>
+
+    <!-- Agent Pipeline Visual -->
+    <div class="pipeline" id="pipeline">
+      <div class="pipeline-step" id="step-research">
+        <div class="step-icon">🔍</div>
+        <div class="step-name">Research</div>
+        <div class="step-desc">Web retrieval</div>
+        <div class="step-status">idle</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step" id="step-analysis">
+        <div class="step-icon">⚗️</div>
+        <div class="step-name">Analysis</div>
+        <div class="step-desc">Filter + rank</div>
+        <div class="step-status">idle</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step" id="step-summary">
+        <div class="step-icon">🧠</div>
+        <div class="step-name">Summary</div>
+        <div class="step-desc">LLM + RAG</div>
+        <div class="step-status">idle</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step" id="step-storage">
+        <div class="step-icon">💾</div>
+        <div class="step-name">Storage</div>
+        <div class="step-desc">DB + vectors</div>
+        <div class="step-status">idle</div>
+      </div>
+    </div>
+
+    <!-- Query Input -->
+    <div class="input-section">
+      <div class="input-wrap">
+        <div class="input-prefix">$</div>
+        <input
+          type="text"
+          id="queryInput"
+          class="query-input"
+          placeholder="e.g. Amazon vs Walmart pricing strategy 2024..."
+          maxlength="500"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <div class="input-count" id="inputCount">0 / 500</div>
+      </div>
+      <div class="input-actions">
+        <button class="btn-research" id="researchBtn" onclick="startResearch()">
+          <span class="btn-icon">◈</span>
+          <span class="btn-text">Run Research</span>
+        </button>
+        <label class="cache-toggle">
+          <input type="checkbox" id="useCache" checked />
+          <span>Use cache</span>
+        </label>
+      </div>
+      <div class="example-queries">
+        <span class="examples-label">Quick examples:</span>
+        <button class="example-chip" onclick="setQuery('Amazon vs Walmart competitive pricing strategy 2024')">Amazon vs Walmart</button>
+        <button class="example-chip" onclick="setQuery('Current trends in D2C retail ecommerce')">D2C Trends</button>
+        <button class="example-chip" onclick="setQuery('AI in retail customer experience innovations')">AI in Retail</button>
+        <button class="example-chip" onclick="setQuery('Supply chain disruption impact on retail 2024')">Supply Chain</button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-panel" id="loadingPanel" style="display:none">
+      <div class="loading-inner">
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-core">◈</div>
+        </div>
+        <div class="loading-text" id="loadingText">Initializing research pipeline...</div>
+        <div class="loading-timer" id="loadingTimer">0s</div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-panel" id="errorPanel" style="display:none">
+      <div class="error-icon">⚠</div>
+      <div class="error-msg" id="errorMsg"></div>
+      <button class="error-retry" onclick="hideError()">Dismiss</button>
+    </div>
+
+    <!-- Results -->
+    <div class="results-panel" id="resultsPanel" style="display:none">
+
+      <!-- Result Header -->
+      <div class="result-header">
+        <div class="result-meta">
+          <span class="result-query" id="resultQuery"></span>
+          <div class="result-badges" id="resultBadges"></div>
+        </div>
+        <div class="result-actions">
+          <button class="action-btn" onclick="copyResult()" title="Copy to clipboard">📋 Copy</button>
+          <button class="action-btn" onclick="clearResults()">✕ Clear</button>
+        </div>
+      </div>
+
+      <!-- Sections Grid -->
+      <div class="sections-grid" id="sectionsGrid"></div>
+
+      <!-- Key Themes -->
+      <div class="themes-block" id="themesBlock">
+        <div class="block-label">KEY THEMES</div>
+        <div class="themes-list" id="themesList"></div>
+      </div>
+
+      <!-- Sources -->
+      <div class="sources-block" id="sourcesBlock">
+        <div class="block-label">SOURCES <span id="sourceCount"></span></div>
+        <div class="sources-list" id="sourcesList"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── History View ────────────────────────────────────────────────── -->
+  <section class="view" id="view-history" style="display:none">
+    <div class="history-header">
+      <h2 class="history-title">Research History</h2>
+      <button class="btn-load-history" onclick="loadHistory()">↻ Refresh</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">Loading history...</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Toast ──────────────────────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

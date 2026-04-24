@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.faiss
+*.pkl
+.env
+faiss_index*
+retail_researcher*

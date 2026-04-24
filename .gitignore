@@ -1,0 +1,21 @@
+# Env files (secrets)
+.env
+backend/.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+backend/venv/
+
+# Database & vector index
+*.db
+*.faiss
+*.pkl
+
+# OS junk
+.DS_Store
+Thumbs.db
