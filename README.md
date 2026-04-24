@@ -15,20 +15,6 @@ Problem Statement
       Studying product demand
       Gathering insights from multiple sources
 
-    Manual research is:
-
-      Time-consuming ⏳
-      Error-prone ❌
-      Inefficient for large-scale data
-
-This project solves the problem using:
-
-    Autonomous agents
-    Real-time web data retrieval
-    AI-powered summarization
-
-Source:
-
  Objectives
 
     Build an autonomous research system
